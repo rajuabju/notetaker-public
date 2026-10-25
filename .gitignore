@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+*.log
+.test-build/
+.wrangler-test.jsonc
+test/e2e/.tmp/

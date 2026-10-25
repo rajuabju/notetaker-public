@@ -1,0 +1,67 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "deal-notes",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // Only reachable at notes.example.com, behind Cloudflare Access.
+  "workers_dev": false,
+  "preview_urls": false,
+  // Secrets are set in the Cloudflare dashboard and must survive deploys:
+  // RECALL_API_KEY, RECALL_VERIFICATION_SECRET, OPENAI_API_KEY, MS_CLIENT_ID,
+  // MS_CLIENT_SECRET, plus optional DEX_API_KEY, DROPBOX_APP_KEY, DROPBOX_APP_SECRET.
+  "keep_vars": true,
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "PUBLIC_BASE_URL": "https://notes.example.com",
+    "RECALL_REGION": "us-west-2",
+    "ACCESS_TEAM_DOMAIN": "YOUR-TEAM.cloudflareaccess.com",
+    "ACCESS_AUD": "YOUR-ACCESS-APPLICATION-AUD-TAG",
+    "ALLOWED_EMAIL": "you@yourfirm.com",
+    "OWNER_NAME": "Alex Rivera",
+    "FIRM_NAME": "Rivera Capital",
+    "FIRM_PROFILE": "a commercial real estate investment firm (industrial, retail and multifamily)",
+    "OPENAI_MODEL": "gpt-5",
+    "TIMEZONE": "America/Los_Angeles"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "deal-notes",
+      "database_id": "YOUR-D1-DATABASE-ID",
+      "migrations_dir": "migrations"
+    },
+    {
+      // Read-only: deals from the deal-pipeline app.
+      "binding": "PIPELINE",
+      "database_name": "deal-pipeline",
+      "database_id": "YOUR-PIPELINE-D1-DATABASE-ID (optional; delete this block if you have no deal pipeline)"
+    }
+  ],
+  "r2_buckets": [
+    { "binding": "FILES", "bucket_name": "deal-notes" }
+  ],
+  "vectorize": [{ "binding": "VECTORS", "index_name": "deal-notes" }],
+  "triggers": {
+    // Every 5 min: pre-meeting briefs (+ To Do completions every 30 min).
+    // 15:00 UTC (8 AM PDT / 7 AM PST): morning digest, audio retention, audio retries, Dropbox folder refresh.
+    "crons": ["*/5 * * * *", "0 15 * * *"]
+  },
+  "queues": {
+    "producers": [{ "binding": "JOBS", "queue": "deal-notes-jobs" }],
+    "consumers": [
+      {
+        "queue": "deal-notes-jobs",
+        "max_batch_size": 5,
+        "max_batch_timeout": 5,
+        "max_retries": 5
+      }
+    ]
+  }
+}
