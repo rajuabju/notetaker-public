@@ -145,9 +145,7 @@ Outlook calendar ─► Recall.ai (bot + transcription) ─webhooks─► Cloudf
 | Cloudflare Workers Paid plan            | $5/month (covers D1, R2, Queues, Vectorize at my volume) |
 | Microsoft 365, Dropbox, Dex             | already paying for these                                 |
 
-At ~20 hours of calls a month that's roughly **$20–25/month all in**, about one seat
-on a commercial notetaker, but it's mine, it knows my deals, and nobody else's AI is
-training on my calls. The app has a Costs card that tracks the estimate live, and an
+The app has a Costs card that tracks the estimate live, and an
 alert if a month goes over a limit I set.
 
 ---
