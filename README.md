@@ -6,7 +6,7 @@ Google Meet calls, records and transcribes them, and then does the stuff I actua
 care about as a CRE investor: pulls out the deal terms, who owes what, comps a broker
 mentioned in passing, what each lender quoted, and files it all where I'd look for it.
 
-It runs on my own Cloudflare account, costs me roughly what one notetaker seat
+It runs on my own Cloudflare account, costs me less than what one notetaker seat
 would, and does a lot of things the generic tools never will, because it knows
 about my deals.
 
